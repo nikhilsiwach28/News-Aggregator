@@ -1,0 +1,22 @@
+{
+  "name": "news-aggregator",
+  "version": "1.0.0",
+  "description": "Restful Apis that allow users to fetch news articls from multiple sources based on preferences.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikhilsiwach28/News-Aggregator.git"
+  },
+  "keywords": [
+    "News"
+  ],
+  "author": "Nikhil Siwach",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikhilsiwach28/News-Aggregator/issues"
+  },
+  "homepage": "https://github.com/nikhilsiwach28/News-Aggregator#readme"
+}
