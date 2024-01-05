@@ -1,25 +1,49 @@
-const UserRepository = require('Repository/UserRepo.js')
-const userService = require('Service/userService.js')
-const User = require('Models/User.js')
+const User = require('../Models/UserModel.js')
+const bcrypt = require('bcrypt');
 
-const userRepo = new UserRepository()
-const userService = new userService(userRepo)
 
+
+function getAllUserDetails(req,res){
+    const allusers = userService.getAllUserDetails()
+    res.send(allusers)
+}
+function getUserDetails(req, res){
+    const id = req.params.userId
+    user = userService.getUserDetails(id)
+}
 
 function registerNewUser(req,res){
-    const {id,name,password,preferences} = req.body
-    user = new User(id,name,password,preferences)
-    return userService.registerUser(user)
+    const {userId,name,password,email,preferences} = req.body
+    const hashedPassword = bcrypt.hashSync(password, 10); 
+    user = new User(userId,name,hashedPassword,email,preferences)
+    try{
+    userService.registerUser(user)
+    res.status(200).send("Registration Successful");
+    }catch(e){
+        res.status(400).send(e.message)
+    }
+    
 }
 
 function loginUser(req,res){
-    const {id} = req.body
-    return userService.loginUser(id)
+    const {userId,password} = req.body
+    try{
+        token = userService.loginUser(userId,password)
+        res.status(200).send(token)
+    }catch(e){
+        res.status(400).send(e.message)
+    
+    }
 }
 
 function getUserPreferences(req,res){
     const id = req.params.userId
-    return userService.UserRepository.getUserPreferences(id)
+    try{
+        const preferences = userService.getUserPreferences(id)
+        res.status(200).send(preferences)
+    }catch(e){
+        res.status(500).send(e.message)
+    }
 }
 
 function updateUserPreferences(req,res){
@@ -28,6 +52,8 @@ function updateUserPreferences(req,res){
 }
 
 module.exports = {
+    getAllUserDetails,
+            getUserDetails,
             registerNewUser, 
             loginUser, 
             getUserPreferences,

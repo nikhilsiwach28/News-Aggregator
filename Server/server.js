@@ -1,7 +1,7 @@
-const express = require('Express')
+const express = require('express');
+const app = express();
 const bodyParser = require('body-parser')
-const routes = require('Routes/routes')
-const app = express()
+const routes = require('../Routes/routes')
 const userRouter = express.Router()
 const newsRouter = express.Router()
 
@@ -14,7 +14,6 @@ const setupServer = (config) => {
 
     const startServer = () => {
         app.listen(config.port, () => {
-        console.log(`Server is running on port ${config.port}`);
             });
         };
 

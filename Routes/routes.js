@@ -1,5 +1,11 @@
-const validator = require('Validator/validate.js')
-const userHandler = require('Handler/userHandler.js')
+const validator = require('../Validator/validator.js')
+const userHandler = require('../Handler/userHandler.js')
+const newsHandler = require('../Handler/newsHandler.js')
+
+const UserRepository = require('../Repository/UserRepo.js')
+const UserService = require('../Service/UserService.js')
+const userRepo = new UserRepository()
+global.userService = new UserService(userRepo)
 
 const setRoutes = (userRouter,newsRouter) =>{
     registerUserEndpoints(userRouter)
@@ -8,20 +14,24 @@ const setRoutes = (userRouter,newsRouter) =>{
 
 
 registerUserEndpoints = (userRouter) => {
-    userRouter.get('/',userHandler.getUserDetails)
-    userRouter.get('/preferences/:userId',userHandler.getUserPreferences)
-    userRouter.post('/register',validator.validateNewUser,userHandler.registerNewUser)
-    userRouter.post('/login',userHandler.loginUser)
-    userRouter.put('/preferences/:userId',userHandler.updateUserPreferences)
+    userRouter.get('/all',userHandler.getAllUserDetails)
+    userRouter.get('/',validator.authorizeUser,userHandler.getUserDetails)
+    userRouter.get('/preferences/:userId', validator.authorizeUser, userHandler.getUserPreferences)
+    userRouter.post('/register',validator.validateUserRegisteration,userHandler.registerNewUser)
+    userRouter.post('/login',userHandler.loginUser) 
+    userRouter.put('/preferences/:userId',validator.authorizeUser,userHandler.updateUserPreferences)
 
 }
 
+
+// Todo :: Complete all NewsRelatedEndpoints handlers 
+
 registerNewsEndpoints = (newsRouter) => {
-    newsRouter.get('/',getNewsOnPreference)
-    newsRouter.get('/read',getAllReadArticles)
-    newsRouter.get('/favorite',getFavArticles)
-    newsRouter.post('/:id/favorite',markNewsAsFav)
-    newsRouter.post('/:id/read',markNewsAsRead)
+    newsRouter.get('/',validator.authorizeUser,newsHandler.getNewsOnPreferences)
+    // newsRouter.get('/read',getAllReadArticles)
+    // newsRouter.get('/favorite',getFavArticles)
+    // newsRouter.post('/:id/favorite',markNewsAsFav) 
+    // newsRouter.post('/:id/read',markNewsAsRead)
 }
 
 module.exports = setRoutes;
